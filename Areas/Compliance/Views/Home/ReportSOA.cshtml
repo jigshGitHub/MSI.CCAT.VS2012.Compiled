@@ -41,6 +41,7 @@
         }
     }
 </script>
+<script src="~/Scripts/application.js" type="text/javascript"></script>
 
 @* Kendo Grid Data Source *@
 <script>
@@ -49,7 +50,7 @@
             type: "json",
             transport: {
                 read: {
-                    url: "Compliance/Home/GetComplianceReportData",
+                    url: baseUrl + "/Compliance/Home/GetComplianceReportData",
                     dataType: "json",
                     data: { searchText: searchText, reportType: $('#reportType').val() },
                     cache: false //This is required othewise grid does not refresh after Edit operation in IE
