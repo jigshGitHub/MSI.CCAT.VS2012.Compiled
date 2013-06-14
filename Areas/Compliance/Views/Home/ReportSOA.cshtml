@@ -131,18 +131,21 @@
 @* Document Ready *@
 <script>
     $(document).ready(function () {
-        
+        showProgress("Please wait...Report is being generated.");
         @*First time Grid Binding*@
         var kendoGridData = get_kendoGridData("");
         $("#SOASearchgrid").kendoGrid(kendoGridData);
+        hideProgress();
 
         @* When Search Button is clicked *@
         $("#btnSearch").click(function () {
+            showProgress("Please wait...Report is being generated.");
             var searchText = $("#searchBox").attr('value');
             var grid = $("#SOASearchgrid").data("kendoGrid");
             var dataSource = get_gridDataSource(searchText);
             grid.dataSource.transport.options.read.data = { searchText: searchText, reportType: $('#reportType').val() };
             grid.dataSource.read();
+            hideProgress();
         });
 
     });
