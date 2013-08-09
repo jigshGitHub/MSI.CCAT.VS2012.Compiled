@@ -111,7 +111,7 @@
 
         self.updateResponse = function (assessmentResponse) {
             $.ajax({
-                url: baseUrl +  '/api/Assessment/',
+                url: baseUrl + '/api/Assessment/Post',
                 type: "POST",
                 data: assessmentResponse,
                 dataType: "json",
@@ -183,8 +183,10 @@
         }
 
         self.loadModules = function () {
+
+            showProgress("Getting Module details...Please wait.");
             $.ajax({
-                url: baseUrl +  '/api/QuestionModule',
+                url: baseUrl + '/api/QuestionModule/Get',
                 type: 'GET',
                 contentType: 'application/json',
                 async: false,
@@ -195,6 +197,7 @@
                             //log(item)
                             self.modules.push(new questionModule(item.Id, item.Name));
                         });
+                        hideProgress();
                     }
                 },
                 error: function (xhr, status, somthing) {
@@ -204,8 +207,9 @@
         }
         self.loadQuestions = function () {
             log(self.selectedQuestionModule());
+            showProgress("Getting Questions...Please wait.");
             $.ajax({
-                url: baseUrl +  '/api/Assessment',
+                url: baseUrl +  '/api/Assessment/Get',
                 type: 'GET',
                 contentType: 'application/json',
                 data: { moduleId: self.selectedQuestionModule().id(), userId: userId },
@@ -220,6 +224,7 @@
                             }
                             self.questionsCollection.push(new assessmentResponse(item.QuestionId, item.Question, item.QuestionTooltip, item.SerialNumber, item.Response, item.ResponseId, userId));
                         });
+                        hideProgress();
                     }
                 },
                 error: function (xhr, status, somthing) {
