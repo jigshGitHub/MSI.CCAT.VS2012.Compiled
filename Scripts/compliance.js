@@ -5,6 +5,7 @@
     else
         return '';
 }
+
 function complianceVM(userId, userAgency) {
     var self = this;
     self.account = ko.observable('');
@@ -67,6 +68,7 @@ function complianceVM(userId, userAgency) {
     self.needFurtherAction_YesNo = ko.observable('');
     self.finalActionStepId = ko.observable('');
     self.createdBy = ko.observable(userId);
+    self.updatedBy = ko.observable(userId);
 
     self.complaintinfoDocumentChecked = ko.observable(false);
     self.debtOwnerProcessDocumentChecked = ko.observable(false);
@@ -140,10 +142,10 @@ function complianceVM(userId, userAgency) {
         }
     }, self);
 
-    self.save = function () {
+    self.save = function (userRole) {
         var json = JSON.stringify({
             AgencyId: self.agency(),
-            Account: self.account(),
+            AccountNumber: self.account(),
             LastName: self.lastName(),
             FirstName: self.firstName(),
             Address: self.address(),
@@ -155,22 +157,22 @@ function complianceVM(userId, userAgency) {
             MobilePhone: self.mobilePhone(),
             LastFourSSN: self.lastFourSSN(),
             DebtorIdentityVerifiedYN: self.debtorIdentityVerified_YesNo(),
-            ContactMethodId: self.contactMethodId(),
-            ContactTimeId: self.contactTimeId(),
+            DebtorContactMethodId: self.contactMethodId(),
+            DebtorContactTimeId: self.contactTimeId(),
             CreditorName: self.creditorName(),
-            DebtProductId: self.debtProductId(),
+            DebtorProductId: self.debtProductId(),
             DebtPurchaseBalance: Number(self.debtPurchaseBalance().replace(/[^0-9\.]+/g, "")),
             DebtCurrentBalance: Number(self.debtCurrentBalance().replace(/[^0-9\.]+/g, "")),
             DisputeDebtYN: self.disputeDebt_YesNo(),
             DisputeDebtAmountYN: self.disputeDebtAmount_YesNo(),
             DisputeDebtDueDateYN: self.disputeDebtDueDate_YesNo(),
-            ComplaintID: self.complaintID(),
+            ComplaintId: self.complaintID(),
             ComplaintDate: self.complaintDate(),
-            ComplaintReceivedByMethodId: self.complaintReceivedByMethodId(),
-            ComplaintIssueId: self.complaintIssueId(),
+            ReceivedByMethodId: self.complaintReceivedByMethodId(),
+            IssuesId: self.complaintIssueId(),
             ComplaintNotes: self.complaintNotes(),
-            ComplaintSubmitedToAgencyYN: self.complaintSubmitedToAgency_YesNo(),
-            ComplaintSubmitedToAgencyDate: self.complaintSubmitedToAgencyDate(),
+            ComplaintSubmittedToAgencyYN: self.complaintSubmitedToAgency_YesNo(),
+            ComplaintSubmittedToAgencyDate: self.complaintSubmitedToAgencyDate(),
             MoreInfoReqdFromDebtorYN: self.moreInfoReqdFromDebtor_YesNo(),
             MoreInfoRequestedDate: self.moreInfoRequestedDate(),
             MoreInfoRequested: self.moreInfoRequested(),
@@ -194,11 +196,19 @@ function complianceVM(userId, userAgency) {
             DebtorAgreeYN: self.debtorAgree_YesNo(),
             NeedFurtherActionYN: self.needFurtherAction_YesNo(),
             FinalActionStepId: self.finalActionStepId(),
-            CreatedBy: self.createdBy()
+            CreatedBy: self.createdBy(),
+            ComplaintStatusId: evaluateStatusId(userRole),
+            UpdatedBy:self.updatedBy()
         });
 
+        function evaluateStatusId(userRole) {
+            if (userRole == 'CollectionAgency') {
+            }
+            else if (userRole == 'DebtOwner') {
+            }
+        }
         function setComplaint(data) {
-            self.populateCompliance(data.Account, data.FirstName, data.LastName, data.DOB, data.Address, data.City, data.State, data.Zip, data.LastFourSSN, data.MobilePhone, data.HomePhone, data.WorkPhone, data.DebtorIdentityVerifiedYN, data.DebtCurrentBalance, data.DebtPurchaseBalance, data.CreditorName, data.DebtProductId, data.DebtPurchaseBalance, data.DebtCurrentBalance, data.DisputeDebtYN, data.DisputeDebtAmountYN, data.DisputeDebtDueDateYN, data.ComplaintID, data.ComplaintDate, data.ComplaintReceivedByMethodId, data.ComplaintIssueId, data.ComplaintNotes, data.ComplaintSubmitedToAgencyYN, data.ComplaintSubmitedToAgencyDate, data.MoreInfoReqdFromDebtorYN, data.MoreInfoRequestedDate, data.MoreInfoRequested, data.MoreInfoReceivedFromDebtorYN, data.MoreInfoReceivedDate, data.MoreInfoReceived, data.ComplaintSubmittedToOwnerYN, data.ComplaintSubmittedDate, data.TimeToSubmitDays, data.MoreInfoFromAgencyYN, data.MoreInfoFromAgencyRequestedDate, data.MoreInfoFromAgencyRequested, data.MoreInfoFromAgencyReceived, data.MoreInfoFromAgencyReceivedYN, data.MoreInfoFromAgencyReceivedDate, data.OwnerResponseId, data.OwnerResponseDate, data.OwnerResponseDays, data.AgencyResponseToDebtorDate, data.TotalResponseTimeDays, data.DebtorAgreeYN, data.NeedFurtherActionYN, data.FinalActionStepId, data.CreatedBy, data.ComplaintDocument, data.DebtOwnerProcessDocument);
+            self.populateCompliance(data.Tbl_Account.Tbl_Agency.Name, data.Tbl_Account.AccountNumber, data.Tbl_Account.FirstName, data.Tbl_Account.LastName, '', data.Tbl_Account.Address, data.Tbl_Account.City, data.Tbl_Account.State, data.Tbl_Account.Zip, data.Tbl_Account.LastFourSSN, data.Tbl_Account.MobilePhone, data.Tbl_Account.HomePhone, data.Tbl_Account.WorkPhone, data.DebtorIdentityVerifiedYN, data.DebtorContactMethodId, data.DebtorContactTimeId, data.Tbl_Account.DebtCurrentBalance, data.Tbl_Account.DebtPurchaseBalance, data.Tbl_Account.CreditorName, data.DebtorProductId, data.DisputeDebtYN, data.DisputeDebtAmountYN, data.DisputeDebtDueDateYN, data.ComplaintId, data.ComplaintDate, data.ReceivedByMethodId, data.IssuesId, data.ComplaintNotes, data.ComplaintSubmittedToAgencyYN, data.ComplaintSubmittedToAgencyDate, data.MoreInfoReqdFromDebtorYN, data.MoreInfoRequestedDate, data.MoreInfoRequested, data.MoreInfoReceivedFromDebtorYN, data.MoreInfoReceivedDate, data.MoreInfoReceived, data.ComplaintSubmittedToOwnerYN, data.ComplaintSubmittedDate, data.TimeToSubmitDays, data.MoreInfoFromAgencyYN, data.MoreInfoFromAgencyRequestedDate, data.MoreInfoFromAgencyRequested, data.MoreInfoFromAgencyReceived, data.MoreInfoFromAgencyReceivedYN, data.MoreInfoFromAgencyReceivedDate, data.OwnerResponseId, data.OwnerResponseDate, data.OwnerResponseDays, data.AgencyResponseToDebtorDate, data.TotalResponseTimeDays, data.DebtorAgreeYN, data.NeedFurtherActionYN, data.FinalActionStepId, data.CreatedBy, data.ComplaintDocument, data.DebtOwnerProcessDocument);
         };
 
         $.ajax({
@@ -209,6 +219,8 @@ function complianceVM(userId, userAgency) {
             contentType: "application/json; charset=utf-8",
             async: false,
             success: function (response) {
+                console.log('save complaint');
+                console.log(response);
                 setComplaint(response);
             },
             error: function (response, errorText) {
@@ -217,7 +229,8 @@ function complianceVM(userId, userAgency) {
         });
     }
 
-    self.populateCompliance = function (account, firstName, lastName, dob, address, city, state, zip, ssn, phoneCell, phoneHome, phoneWork,debtorIdentityVerified_YesNo, debtCurrentBalance, debtorPurchaseBalance, creditorName, debtProductId, debtPurchaseBalance, debtCurrentBalance, disputeDebt_YesNo, disputeDebtAmount_YesNo, disputeDebtDueDate_YesNo, complaintID, complaintDate, complaintMethodId, complaintIssueId, complaintNotes, complaintSubmitedToAgency_YesNo, complaintSubmitedToAgencyDate, moreInfoReqdFromDebtor_YesNo, moreInfoRequestedDate, moreInfoRequested, moreInfoReceivedFromDebtor_YesNo, moreInfoReceivedDate, moreInfoReceived, complaintSubmittedToOwner_YesNo, complaintSubmittedDate, timeToSubmitDays, moreInfoFromAgency_YesNo, moreInfoFromAgencyRequestedDate, moreInfoFromAgencyRequested, moreInfoFromAgencyReceived, moreInfoFromAgencyReceivedYN, moreInfoFromAgencyReceivedDate, ownerResponseId, ownerResponseDate, ownerResponseDays, agencyResponseToDebtorDate, totalResponseTimeDays, debtorAgree_YesNo, needFurtherAction_YesNo, finalActionStepId, createdBy, complaintDoc, debtOwnerProcessDoc) {
+    self.populateCompliance = function (agency,account, firstName, lastName, dob, address, city, state, zip, ssn, phoneCell, phoneHome, phoneWork, debtorIdentityVerified_YesNo, debtorContactMethodId, debtorContactTimeId, debtCurrentBalance, debtPurchaseBalance, creditorName, debtProductId, disputeDebt_YesNo, disputeDebtAmount_YesNo, disputeDebtDueDate_YesNo, complaintID, complaintDate, complaintMethodId, complaintIssueId, complaintNotes, complaintSubmitedToAgency_YesNo, complaintSubmitedToAgencyDate, moreInfoReqdFromDebtor_YesNo, moreInfoRequestedDate, moreInfoRequested, moreInfoReceivedFromDebtor_YesNo, moreInfoReceivedDate, moreInfoReceived, complaintSubmittedToOwner_YesNo, complaintSubmittedDate, timeToSubmitDays, moreInfoFromAgency_YesNo, moreInfoFromAgencyRequestedDate, moreInfoFromAgencyRequested, moreInfoFromAgencyReceived, moreInfoFromAgencyReceivedYN, moreInfoFromAgencyReceivedDate, ownerResponseId, ownerResponseDate, ownerResponseDays, agencyResponseToDebtorDate, totalResponseTimeDays, debtorAgree_YesNo, needFurtherAction_YesNo, finalActionStepId, createdBy, complaintDoc, debtOwnerProcessDoc) {
+        self.agency(agency); 
         self.account(account);
         self.firstName(firstName);
         self.lastName(lastName);
@@ -231,8 +244,8 @@ function complianceVM(userId, userAgency) {
         self.homePhone(phoneHome);
         self.workPhone(phoneWork);
         self.debtorIdentityVerified_YesNo((debtorIdentityVerified_YesNo) ? 'true' : 'false');
-        self.debtCurrentBalance(debtCurrentBalance);
-        self.debtPurchaseBalance(debtorPurchaseBalance);
+        self.contactMethodId(debtorContactMethodId);
+        self.contactTimeId(debtorContactTimeId);
         self.creditorName(creditorName);
         self.debtProductId(debtProductId);
         self.debtPurchaseBalance(((debtPurchaseBalance == '') ? '' : formatCurrency(debtPurchaseBalance)));
@@ -283,7 +296,7 @@ function complianceVM(userId, userAgency) {
     }    
 }
 
-function pimsDebtor(account, firstName, lastName, dob, address1, address2, city, state, zip, ssn, phoneCell, phoneHome, phoneWork, debtCurrentBalance, debtorPurchaseBalance, creditorName) {
+function pimsDebtor(account, firstName, lastName, dob, address1, address2, city, state, zip, ssn, phoneCell, phoneHome, phoneWork, debtCurrentBalance, debtorPurchaseBalance, creditorName, accountOriginal) {
     var self = this;
     self.account = ko.observable(account);
     self.firstName = ko.observable(firstName);
@@ -301,4 +314,5 @@ function pimsDebtor(account, firstName, lastName, dob, address1, address2, city,
     self.debtCurrentBalance = ko.observable(debtCurrentBalance);
     self.debtorPurchaseBalance = ko.observable(debtorPurchaseBalance);
     self.creditorName = ko.observable(creditorName);
+    self.accountOriginal = ko.observable(accountOriginal);
 }

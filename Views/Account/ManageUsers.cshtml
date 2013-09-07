@@ -36,6 +36,7 @@
                     </td>
                     <td style="width: 74%">
                         <input type="text" data-bind="value: firstName" />
+                        <span class="label label-important"><small>Required</small></span>
                     </td>
                 </tr>
                 <tr>
@@ -45,6 +46,7 @@
                     </td>
                     <td>
                         <input type="text" data-bind="value: lastName" />
+                        <span class="label label-important"><small>Required</small></span>
                     </td>
                 </tr>
                 <tr>
@@ -54,6 +56,7 @@
                     </td>
                     <td>
                         <input type="text" data-bind="value: email" />
+                        <span class="label label-important"><small>Required</small></span>
                     </td>
                 </tr>
                 <tr>
@@ -62,8 +65,7 @@
                     <td>:
                     </td>
                     <td>
-                        <select data-bind="options: roles, optionsValue: 'value', optionsCaption: ' ', optionsText: 'text', value: role">
-                        </select>
+                        <select data-bind="kendoDropDownList: { dataTextField: 'text', optionLabel: ' ', dataValueField: 'value', data: roles, value: role }"/>
                     </td>
                 </tr>
                 <tr data-bind="visible: makeAgenciesVisible">
@@ -71,8 +73,7 @@
                     <td>:
                     </td>
                     <td>
-                        <select data-bind="options: agencies, optionsValue: 'Value', optionsCaption: ' ', optionsText: 'Text', value: agencySelected">
-                        </select>
+                        <select data-bind="kendoDropDownList: { dataTextField: 'Text', optionLabel: ' ', dataValueField: 'Value', data: agencies, value: agencySelected }"/>
                     </td>
                 </tr>
                 <tr data-bind="visible: makeLawFirmVivible">
@@ -80,26 +81,23 @@
                     <td>:
                     </td>
                     <td>
-                        <select data-bind="options: lawFirms, optionsValue: 'Value', optionsCaption: ' ', optionsText: 'Text', value: lawFirmSelected">
-                        </select>
+                        <select data-bind="kendoDropDownList: { dataTextField: 'Text', optionLabel: ' ', dataValueField: 'Value', data: lawFirms, value: lawFirmSelected }"/>
                     </td>
                 </tr>
-                 <tr data-bind="visible: makeCreditIssuersVisible">
+                <tr data-bind="visible: makeCreditIssuersVisible">
                     <td data-bind="text: roleKeyTitle"></td>
                     <td>:
                     </td>
                     <td>
-                        <select data-bind="options: creditIssuers, optionsValue: 'Value', optionsCaption: ' ', optionsText: 'Text', value: creditIssuerSelected">
-                        </select>
+                        <select data-bind="kendoDropDownList: { dataTextField: 'Text', optionLabel: ' ', dataValueField: 'Value', data: creditIssuers, value: creditIssuerSelected }"/>
                     </td>
                 </tr>
-                 <tr data-bind="visible: makeDebtOwnersVisible">
+                <tr data-bind="visible: makeDebtOwnersVisible">
                     <td data-bind="text: roleKeyTitle"></td>
                     <td>:
                     </td>
                     <td>
-                        <select data-bind="options: debtOwners, optionsValue: 'Value', optionsCaption: ' ', optionsText: 'Text', value: debtOwnerSelected">
-                        </select>
+                        <select data-bind="kendoDropDownList: { dataTextField: 'Text', optionsCaption: ' ', dataValueField: 'Value', data: debtOwners, value: debtOwnerSelected }"/>
                     </td>
                 </tr>
                 <tr>
@@ -327,33 +325,38 @@
             var roleEntityValue;
             //alert(self.firstName() + '' + self.lastName() + '' + self.email())
             if (self.firstName() == '' || self.firstName() == undefined || self.lastName() == '' || self.lastName() == undefined || self.email() == '' || self.email() == undefined) {
-                alert('First Name, Last Name and Email is required');
+                //alert('First Name, Last Name and Email is required');
+                showNoti_.error('First Name, Last Name and Email is required!!', false);
                 return false;
             }
             if (self.makeAgenciesVisible()) {
                 if (self.role() == 'CollectionAgency' && self.agencySelected() == '' || self.agencySelected() == undefined) {
-                    alert('Collection Agency value is required');
+                    //alert('Collection Agency value is required');
+                    showNoti_.error('Collection Agency value is required!!', false);
                     return false;
                 }
                 roleEntityValue = self.agencySelected()
             }
             else if (self.makeLawFirmVivible()) {
                 if (self.role() == 'CollectionLawfirm' && (self.lawFirmSelected() == '' || self.lawFirmSelected() == undefined)) {
-                    alert('Collection LawFirm value is required');
+                    //alert('Collection LawFirm value is required');
+                    showNoti_.error('Collection LawFirm value is required!!', false);
                     return false;
                 }
                 roleEntityValue = self.lawFirmSelected()
             }
             else if (self.makeCreditIssuersVisible()) {
                 if (self.role() == 'CreditIssuer' && (self.creditIssuerSelected() == '' || self.creditIssuerSelected() == undefined)) {
-                    alert('Credit Issuer value is required');
+                    //alert('Credit Issuer value is required');
+                    showNoti_.error('Credit Issuer value is required!!', false);
                     return false;
                 }
                 roleEntityValue = self.creditIssuerSelected()
             }
             else if (self.makeDebtOwnersVisible()) {
                 if (self.role() == 'DebtOwner' && (self.debtOwnerSelected() == '' || self.debtOwnerSelected() == undefined)) {
-                    alert('Debt Owner value is required');
+                    //alert('Debt Owner value is required');
+                    showNoti_.error('Debt Owner value is required!!', false);
                     return false;
                 }
                 roleEntityValue = self.debtOwnerSelected()
@@ -418,6 +421,7 @@
     };
     $(document).ready(function () {
         $(document).ready(function () {
+
             var dataSource = new kendo.data.DataSource({
                     transport: {
                         read: {
