@@ -110,6 +110,7 @@
                     Select document for manager process:<input name="debtOwnerProcessDocument" type="file" />
                 </div>
                 <input type="hidden" name="hdnAccount" data-bind="value: account" />
+                <input type="hidden" name="hdnComplaintId" data-bind="value: complaintID" />
                 <input type="hidden" name="hdnAgency" data-bind="value: agency" />
                 <input type="submit" value="Submit" class="btn btn-primary"  data-bind="click: uploadDocument"/>
             }
@@ -725,7 +726,7 @@
             $.ajax({
                 url: baseUrl + '/api/Compliance/',
                 type: "GET",
-                data: { accountNumber: account, userAgency: roleEntityValue, userRole: self.userRole(), createUpdateMode: 'create' },
+                data: { accountNumber: account, complaintId: '',userAgency: roleEntityValue, userRole: self.userRole(), createUpdateMode: 'create' },
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 async: false,
@@ -1111,14 +1112,24 @@
                 $("#messageSummary").modal();
             }
             else {
-                self.complianceModel.save(self.userRole());
-                self.message('Data saved successfully!');
-                showNoti_.info(self.message(), false);
-                $('#successAlert').addClass('in').toggle();
-                if (self.complianceModel.complaintinfoDocumentChecked() == true || self.complianceModel.debtOwnerProcessDocumentChecked() == true) {
-                    //$('#fileUploadContainer').dialog('open');
-                    $('#fileUploadContainer').modal();
-                }
+                self.complianceModel.save(self.userRole(), function (response) {
+                    if (response.ExceptionMessage == undefined || response.ExceptionMessage == null) {
+                        self.message('Data saved successfully!');
+                        showNoti_.info(self.message(), false);
+                        $('#successAlert').addClass('in').toggle();
+                        if (self.complianceModel.complaintinfoDocumentChecked() == true || self.complianceModel.debtOwnerProcessDocumentChecked() == true) {
+                            //$('#fileUploadContainer').dialog('open');
+                            $('#fileUploadContainer').modal();
+                        }
+                    }
+                    else {
+                        console.log(response.ExceptionMessage);
+                        self.message(response.Message);
+                        showNoti_.error(self.message(), false);
+                        $('#errorAlert').addClass('in').toggle();
+                    }
+                });
+                
             }
             //window.location.reload();
 
