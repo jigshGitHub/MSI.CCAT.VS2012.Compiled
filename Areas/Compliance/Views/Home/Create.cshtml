@@ -822,7 +822,7 @@
             else
                 return '';
         }
-        self.agenciesDisable = ko.computed(function () { return (self.userRole() == 'CollectionAgency') ? true : false }, self);
+        self.agenciesDisable = ko.computed(function () { return (self.userRole() == 'CollectionAgency' || self.userRole() == 'AgencyCollector' || self.userRole() == 'AgencyCompliance' || self.userRole() == 'AgencyManager') ? true : false }, self);
         self.agencies = ko.computed(function () {
             var localAgencies = [];
             $.ajax({
@@ -1102,10 +1102,9 @@
         };
 
         self.getAccounts = function () {
-            self.message('');            
-
+            self.message('');
             if ((self.firstOrLastName() != '' && self.phoneNumber() == '') || (self.firstOrLastName() == '' && self.phoneNumber() != '')) {
-                //alert('Both Firstname/Lastname and phone number required to search');
+                alert('Both Firstname/Lastname and phone number required to search');
                 self.message('Both Firstname/Lastname and phone number required to search');
                 showNoti_.error('Both Firstname/Lastname and phone number required to search', false);
                 $('#errorAlert').addClass('in').toggle();
@@ -1153,7 +1152,7 @@
                 });
             }
             else {
-                //alert('Please enter at least one search criteria');
+                alert('Please enter at least one search criteria');
                 self.message('Please enter at least one search criteria');
                 showNoti_.error('Please enter at least one search criteria', false);
                 $('#errorAlert').addClass('in').toggle();
@@ -1222,7 +1221,7 @@
 
         /* Show/Hide Options */
         self.showComplaintSumittedToAgencyInfo = ko.computed(function () {
-            if (self.userRole() != 'CollectionAgency')
+            if (self.userRole() == 'CollectionAgency' || self.userRole() == 'AgencyCollector' || self.userRole() == 'AgencyCompliance' || self.userRole() == 'AgencyManager')
                 return true;
             return false;
         }).bind(self);
@@ -1262,7 +1261,7 @@
                 self.showComplaintClosure(true);
         }
         self.isDebtOwnerProcessVisible = ko.computed(function () {
-            return (self.userRole() == 'CollectionAgency') ? false : true;
+            return (self.userRole() == 'CollectionAgency' || self.userRole() == 'AgencyCollector' || self.userRole() == 'AgencyCompliance' || self.userRole() == 'AgencyManager') ? false : true;
         }, self);
         self.validationErrors = ko.observableArray([]);
 
